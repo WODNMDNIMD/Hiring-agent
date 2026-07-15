@@ -87,21 +87,15 @@ def inject_css() -> None:
         """
         <style>
         :root {
-            --rf-border: #cbd5e1;
-            --rf-muted: #475569;
-            --rf-ink: #0b1220;
+            --rf-border: rgba(15, 23, 42, 0.10);
+            --rf-muted: #64748b;
+            --rf-ink: #0f172a;
             --rf-panel: #ffffff;
-            --rf-soft: #eef2f7;
-            --rf-page: #f3f6fb;
-            --rf-brand: #1d4ed8;
-            --rf-brand-dark: #0f172a;
+            --rf-soft: #f8fafc;
+            --rf-brand: #2563eb;
             --rf-green: #059669;
             --rf-amber: #d97706;
             --rf-red: #dc2626;
-        }
-        html, body, [data-testid="stAppViewContainer"] {
-            background: var(--rf-page);
-            color: var(--rf-ink);
         }
         .main .block-container {
             padding-top: 1.6rem;
@@ -109,30 +103,13 @@ def inject_css() -> None:
             max-width: 1280px;
         }
         [data-testid="stSidebar"] {
-            border-right: 1px solid #1e293b;
-            background: #0f172a;
-        }
-        [data-testid="stSidebar"] * {
-            color: #f8fafc !important;
-        }
-        [data-testid="stSidebar"] code {
-            color: #dbeafe !important;
-            background: #1e293b !important;
-            border: 1px solid #334155;
+            border-right: 1px solid var(--rf-border);
         }
         [data-testid="stMetric"] {
             background: var(--rf-panel);
             border: 1px solid var(--rf-border);
             border-radius: 8px;
             padding: 14px 14px 12px;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
-        }
-        [data-testid="stMetricLabel"] p {
-            color: #334155;
-            font-weight: 700;
-        }
-        [data-testid="stMetricValue"] {
-            color: #0f172a;
         }
         .rf-hero {
             border: 1px solid #0f172a;
@@ -140,7 +117,6 @@ def inject_css() -> None:
             background: #0f172a;
             padding: 20px 22px;
             margin-bottom: 18px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, .16);
         }
         .rf-eyebrow {
             color: #93c5fd;
@@ -170,7 +146,6 @@ def inject_css() -> None:
             background: var(--rf-panel);
             padding: 16px;
             margin-bottom: 14px;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
         }
         .rf-section-title {
             color: #0f172a;
@@ -187,8 +162,8 @@ def inject_css() -> None:
         .rf-note {
             border: 1px solid rgba(37, 99, 235, .18);
             border-radius: 8px;
-            background: #dbeafe;
-            color: #172554;
+            background: #eff6ff;
+            color: #1e3a8a;
             padding: 10px 12px;
             font-size: 13px;
             line-height: 1.5;
@@ -201,7 +176,7 @@ def inject_css() -> None:
             font-size: 12px;
             font-weight: 700;
             background: var(--rf-soft);
-            color: #0f172a;
+            color: #334155;
             border: 1px solid var(--rf-border);
             margin-right: 6px;
             margin-bottom: 6px;
@@ -238,16 +213,6 @@ def inject_css() -> None:
             font-size: 16px;
             font-weight: 800;
             overflow-wrap: anywhere;
-        }
-        .stButton > button {
-            border-radius: 8px;
-            font-weight: 700;
-        }
-        div[data-testid="stDataFrame"] {
-            border: 1px solid var(--rf-border);
-            border-radius: 8px;
-            background: #fff;
-            padding: 4px;
         }
         </style>
         """,
