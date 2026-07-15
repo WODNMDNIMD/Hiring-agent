@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -21,7 +21,35 @@ Stage = Literal[
 ]
 
 RecommendationLevel = Literal["建议推进", "人工复核", "暂不推进"]
-FeedbackIntent = Literal["可以约面", "不合适", "进入复试", "通过", "发Offer", "待补充", "未知"]
+FeedbackIntent = Literal["可以约面", "不合适", "进入复试", "通过", "发Offer", "候选人放弃", "待补充", "未知"]
+RecruitmentEventType = Literal[
+    "resume_parsed",
+    "resume_confirmed",
+    "candidate_upserted",
+    "application_created",
+    "application_updated",
+    "feedback_parsed",
+    "feedback_confirmed",
+    "feedback_blocked",
+    "stage_changed",
+    "integration_synced",
+    "integration_failed",
+]
+RecruitmentEventStatus = Literal["pending", "confirmed", "needs_review", "failed", "ignored"]
+RecruitmentEventSource = Literal["ai", "manual", "system", "wecom", "tencent_docs"]
+IntegrationType = Literal["wecom", "wecom_test", "tencent_docs", "ai_provider", "mock", "system"]
+IntegrationStatus = Literal[
+    "pending",
+    "success",
+    "failed",
+    "mock",
+    "mock_synced",
+    "sent",
+    "config_error",
+    "not_implemented",
+    "pending_api_credentials",
+    "unknown",
+]
 
 
 class CandidateProfile(BaseModel):
@@ -64,3 +92,29 @@ class FeedbackParseResult(BaseModel):
     reason: Optional[str] = None
     invitation_message: Optional[str] = None
     confidence: float = Field(default=0.7, ge=0, le=1)
+
+
+class RecruitmentEventCreate(BaseModel):
+    event_type: RecruitmentEventType
+    application_id: Optional[int] = None
+    candidate_id: Optional[int] = None
+    job_id: Optional[int] = None
+    source: RecruitmentEventSource = "system"
+    title: Optional[str] = None
+    raw_content: Optional[str] = None
+    parsed_content: Dict[str, Any] = Field(default_factory=dict)
+    payload: Dict[str, Any] = Field(default_factory=dict)
+    old_stage: Optional[Stage] = None
+    new_stage: Optional[Stage] = None
+    confidence: Optional[float] = Field(default=None, ge=0, le=1)
+    status: RecruitmentEventStatus = "confirmed"
+    actor: Optional[str] = None
+
+
+class IntegrationLogCreate(BaseModel):
+    integration_type: IntegrationType
+    status: IntegrationStatus
+    event_id: Optional[int] = None
+    request_data: Dict[str, Any] = Field(default_factory=dict)
+    response_data: Dict[str, Any] = Field(default_factory=dict)
+    error_message: Optional[str] = None

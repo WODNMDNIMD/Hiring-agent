@@ -2,10 +2,10 @@
 .venv/
 __pycache__/
 *.pyc
+*.log
 .pytest_cache/
 .streamlit/secrets.toml
 data/*.db
 data/*.db-*
 data/*.csv
 uploads/
-

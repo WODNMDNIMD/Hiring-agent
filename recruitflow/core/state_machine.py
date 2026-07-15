@@ -32,8 +32,16 @@ def can_transition(old_stage: Stage, new_stage: Stage) -> bool:
 def stage_for_feedback_intent(intent: str, current_stage: Stage) -> Stage:
     if intent == "不合适":
         return "不合适"
+    if intent == "候选人放弃":
+        return "候选人放弃"
     if intent == "可以约面":
-        return "初试待安排" if current_stage == "待二审" else current_stage
+        if current_stage == "待二审":
+            return "初试待安排"
+        if current_stage == "初试待反馈":
+            return "复试待安排"
+        if current_stage == "复试待反馈":
+            return "终试待安排"
+        return current_stage
     if intent == "进入复试":
         return "复试待安排"
     if intent == "通过":
@@ -45,3 +53,9 @@ def stage_for_feedback_intent(intent: str, current_stage: Stage) -> Stage:
         return "Offer审批"
     return current_stage
 
+
+def allowed_transition_message(old_stage: Stage, new_stage: Stage) -> str:
+    if can_transition(old_stage, new_stage):
+        return "允许流转"
+    allowed = "、".join(sorted(ALLOWED_TRANSITIONS.get(old_stage, set()))) or "无"
+    return f"不能从「{old_stage}」流转到「{new_stage}」。允许下一状态：{allowed}"
