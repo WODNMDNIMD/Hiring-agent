@@ -22,9 +22,13 @@ RecruitFlow AI 是一个面向 HR 招聘流程的轻量 AI 应用 Demo，用于�
 
 ## Demo 视频
 
-GitHub 首页可直接查看 Demo 录屏：
+GitHub 首页可直接查看 Demo 动图预览：
 
-[点击播放 Demo 视频](assets/demo.mp4)
+![RecruitFlow AI Demo](assets/demo.gif)
+
+高清录屏：
+
+[点击播放 MP4 视频](assets/demo.mp4)
 
 ## Demo 展示流程
 
