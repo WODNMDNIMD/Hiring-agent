@@ -699,19 +699,33 @@ def render_events() -> None:
         st.info("暂无同步记录。")
 
     st.subheader("外部集成日志")
-    logs = db.integration_logs_view(DB_PATH)
+    logs = prepare_integration_logs(db.integration_logs_view(DB_PATH))
     if logs.empty:
         st.info("暂无企业微信或文档同步日志。")
     else:
         st.dataframe(
-            logs,
+            logs[
+                [
+                    "id",
+                    "event_ref",
+                    "integration_type",
+                    "status",
+                    "error_message",
+                    "request_preview",
+                    "response_preview",
+                    "created_at",
+                ]
+            ],
             use_container_width=True,
             hide_index=True,
             column_config={
                 "id": st.column_config.NumberColumn("日志ID", format="#%d"),
-                "event_id": st.column_config.NumberColumn("事件ID", format="#%d"),
+                "event_ref": "事件ID",
                 "integration_type": "集成类型",
                 "status": "状态",
+                "error_message": "错误信息",
+                "request_preview": "请求摘要",
+                "response_preview": "响应摘要",
                 "created_at": st.column_config.DatetimeColumn("时间", format="YYYY-MM-DD HH:mm"),
             },
         )
@@ -864,6 +878,36 @@ def prepare_events(events: pd.DataFrame) -> pd.DataFrame:
     view["created_at"] = pd.to_datetime(view["created_at"], errors="coerce")
     view["confidence"] = pd.to_numeric(view["confidence"], errors="coerce")
     return view.sort_values("created_at", ascending=False)
+
+
+def prepare_integration_logs(logs: pd.DataFrame) -> pd.DataFrame:
+    if logs.empty:
+        return logs
+    view = logs.copy()
+    view["created_at"] = pd.to_datetime(view["created_at"], errors="coerce")
+    view["event_ref"] = view["event_id"].apply(format_optional_id)
+    view["error_message"] = view["error_message"].fillna("")
+    view["request_preview"] = view["request_data"].apply(compact_json_preview)
+    view["response_preview"] = view["response_data"].apply(compact_json_preview)
+    return view.sort_values("created_at", ascending=False)
+
+
+def format_optional_id(value: object) -> str:
+    if pd.isna(value):
+        return "-"
+    try:
+        return f"#{int(value)}"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def compact_json_preview(value: object, limit: int = 160) -> str:
+    if value is None or pd.isna(value):
+        return ""
+    text = str(value).replace("\n", " ").strip()
+    if len(text) <= limit:
+        return text
+    return text[: limit - 1] + "…"
 
 
 def stage_count_frame(data: pd.DataFrame) -> pd.DataFrame:
