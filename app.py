@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
@@ -19,9 +18,7 @@ from recruitflow.utils.files import extract_text
 load_dotenv()
 
 DB_PATH = os.getenv("DATABASE_URL", "data/recruitflow.db")
-DEMO_VIDEO_PATH = Path("assets/demo.mp4")
 
-PAGE_HOME = "项目首页"
 PAGE_INTAKE = "AI候选人录入"
 PAGE_FEEDBACK = "面试官反馈"
 PAGE_CANDIDATES = "候选人台账"
@@ -31,7 +28,6 @@ PAGE_EVENTS = "事件日志"
 PAGE_SETTINGS = "岗位配置"
 
 PAGES = [
-    PAGE_HOME,
     PAGE_INTAKE,
     PAGE_FEEDBACK,
     PAGE_CANDIDATES,
@@ -69,10 +65,8 @@ def main() -> None:
     inject_css()
     render_sidebar()
 
-    page = st.session_state.get("page", PAGE_HOME)
-    if page == PAGE_HOME:
-        render_home()
-    elif page == PAGE_INTAKE:
+    page = st.session_state.get("page", PAGE_INTAKE)
+    if page == PAGE_INTAKE:
         render_intake()
     elif page == PAGE_FEEDBACK:
         render_feedback()
@@ -246,51 +240,6 @@ def render_sidebar() -> None:
         f"WECOM_NOTIFY_ENABLED={current_wecom_enabled()}"
     )
     st.sidebar.caption("默认 mock 能力可完成现场演示，不依赖外部模型或企业微信授权。")
-
-
-def render_home() -> None:
-    render_page_header(
-        "RecruitFlow AI Demo",
-        "招聘流程智能助手演示",
-        "本页展示完整 Demo 录屏，并说明从简历进入到招聘看板复盘的主流程。",
-    )
-
-    left, right = st.columns([0.68, 0.32], gap="large")
-    with left:
-        st.subheader("Demo 演示视频")
-        if DEMO_VIDEO_PATH.exists():
-            st.video(str(DEMO_VIDEO_PATH))
-        else:
-            st.warning("未找到 Demo 视频文件：assets/demo.mp4")
-
-    with right:
-        st.subheader("展示流程")
-        st.markdown(
-            """
-            1. 岗位配置  
-            2. AI候选人录入  
-            3. 企业微信群  
-            4. 面试官反馈  
-            5. 候选人台账  
-            6. 招聘看板  
-            7. 事件日志  
-            """
-        )
-        st.markdown(
-            """
-            <div class="rf-note">
-            Demo 默认使用 Mock 模式，不依赖真实模型 Key、企业微信 Webhook 或腾讯文档授权。
-            完整文字说明见仓库 docs/demo-script.md。
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    st.markdown("### Demo 说明")
-    st.write(
-        "RecruitFlow AI 聚焦招聘流程中 HR 重复录入、状态跟踪和数据同步的问题。"
-        "系统通过 AI 解析简历和面试官反馈，再由确定性工作流完成候选人入库、状态流转、企业微信群推送、腾讯文档 Mock 同步和看板复盘。"
-    )
 
 
 def render_page_header(eyebrow: str, title: str, subtitle: str) -> None:
