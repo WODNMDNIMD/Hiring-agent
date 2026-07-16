@@ -20,6 +20,27 @@ RecruitFlow AI 是一个面向 HR 招聘流程的轻量 AI 应用 Demo，用于�
 - 腾讯文档同步：MVP 默认写入本地 Mock CSV，真实 API 通过适配器扩展。
 - 招聘看板：展示阶段漏斗、岗位分布和平均匹配分。
 
+## Demo 展示流程
+
+录屏 Demo 建议按照以下顺序展示：
+
+```text
+岗位配置
+  -> AI候选人录入
+  -> 企业微信群
+  -> 面试官反馈
+  -> 候选人台账
+  -> 招聘看板
+  -> 事件日志
+```
+
+完整文字说明见：
+
+- [Demo 流程说明](docs/demo-script.md)
+- [视频检查清单](docs/video-review-checklist.md)
+- [项目架构说明](docs/architecture.md)
+- [项目实施计划](docs/project-plan.md)
+
 ## 快速开始
 
 推荐 Python 3.12。
